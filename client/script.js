@@ -21,7 +21,7 @@ function typeText(element, text) {
   let index = 0;
   let interval = setInterval(() => {
     if (index < text.length) {
-      element.innerElement += text.charAt(index);
+      element.innerHTML += text.charAt(index);
       index++;
     } else {
       clearInterval(interval);
@@ -71,6 +71,30 @@ const handleSubmit = async (e) => {
   const messageDiv = document.getElementById(uniqueId);
 
   loader(messageDiv);
+
+  const response = await fetch('http://localhost:5001', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      prompt: data.get('prompt')
+    })
+  })
+
+  clearInterval(loadInterval);
+  messageDiv.innerHTML = '';
+
+  if (response.ok) {
+    const data = await response.json();
+    const parsedData = data.bot.trim();
+
+    typeText(messageDiv, parsedData);
+  } else {
+    const err = await response.text();
+    messageDiv.innerHTML = 'Something went wrong';
+    alert(err);
+  }
 }
 
 form.addEventListener('submit', handleSubmit);
