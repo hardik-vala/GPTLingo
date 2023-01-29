@@ -25,11 +25,12 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
     try {
         const prompt = req.body.prompt;
+
         const response = await openai.createCompletion({
-            model: "text-ada-001",
-            prompt: `Translate this into French:\n\n${prompt}\n\n`,
-            temperature: 0.5,
-            max_tokens: 250,
+            model: "text-davinci-003",
+            prompt: `${prompt}\n\n`,
+            temperature: 0.2,
+            max_tokens: 500,
             top_p: 1,
             frequency_penalty: 0,
             presence_penalty: 0,
