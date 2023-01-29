@@ -24,6 +24,8 @@ app.get('/', async (req, res) => {
 
 app.post('/', async (req, res) => {
     try {
+        console.log({ req });
+
         const prompt = req.body.prompt;
 
         const response = await openai.createCompletion({
