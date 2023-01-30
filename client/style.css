@@ -112,6 +112,10 @@ body {
   display: none;
 }
 
+.source_translation {
+  color: #999; 
+}
+
 form {
   width: 100%;
   max-width: 1280px;

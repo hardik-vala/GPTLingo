@@ -36,18 +36,47 @@ function generateUniqueId() {
   return `id-${timestamp}-${hexadecimalString}`; 
 }
 
-function chatStripe(isAi, value, uniqueId) {
+function chatStripe(value, uniqueId) {
   return (
     `
-    <div class="wrapper ${isAi && 'ai'}">
+    <div class="wrapper">
       <div class="chat">
         <div class="profile">
           <img
-            src="${isAi ? bot : user}"
-            alt="${isAi ? 'bot' : 'user'}"
+            src="${user}"
+            alt="user"
           />
         </div>
         <div class="message" id="${uniqueId}">${value}</div>
+      </div>
+    </div>
+    `
+  )
+}
+
+function chatAiStripe(value, sourceTranslation, uniqueId) {
+  return (
+    `
+    <div class="wrapper ai}">
+      <div class="chat">
+        <div class="profile">
+          <img
+            src="${bot}"
+            alt="bot"
+          />
+        </div>
+        <div class="message" id="${uniqueId}">${value}</div>
+      </div>
+    </div>
+    <div class="wrapper ai}">
+      <div class="chat">
+        <div class="profile" style="display: none">
+          <img
+            src="${bot}"
+            alt="bot"
+          />
+        </div>
+        <div class="message source_translation" id="${uniqueId}-st">English: ${sourceTranslation}</div>
       </div>
     </div>
     `
@@ -74,16 +103,17 @@ const handleSubmit = async (e) => {
   const data = new FormData(form);
 
   // user's chatstripe
-  chatContainer.innerHTML += chatStripe(false, data.get('prompt'));
+  chatContainer.innerHTML += chatStripe(data.get('prompt'));
 
   form.reset();
 
   // bot's chatstripe
   const uniqueId = generateUniqueId();
-  chatContainer.innerHTML += chatStripe(true, ' ', uniqueId);
+  chatContainer.innerHTML += chatAiStripe(' ', ' ', uniqueId);
 
   chatContainer.scrollTop = chatContainer.scrollHeight;
   const messageDiv = document.getElementById(uniqueId);
+  const sourceTranslationDiv = document.getElementById(`${uniqueId}-st`);
 
   loader(messageDiv);
 
@@ -95,7 +125,9 @@ const handleSubmit = async (e) => {
       },
       body: JSON.stringify({
         prompt: data.get('prompt')
-      })
+      }),
+      // 30 sec
+      timeout: 30000,
     });
     clearInterval(loadInterval);
     messageDiv.innerHTML = '';
@@ -103,16 +135,20 @@ const handleSubmit = async (e) => {
     if (response.ok) {
       const data = await response.json();
       const parsedData = data.bot.trim();
-
       typeText(messageDiv, parsedData);
+      
+      if (data.botSourceTranslation) {
+        const parsedSourceTranslation = data.botSourceTranslation.trim();
+        typeText(sourceTranslationDiv, parsedSourceTranslation);
+      }
     } else {
       const err = await response.text();
-      messageDiv.innerHTML = 'Something went wrong';
+      messageDiv.innerHTML = '(Something went wrong...)';
       alert(err);
     }
   } catch (error) {
     clearInterval(loadInterval);
-    messageDiv.innerHTML = 'Something went wrong';
+    messageDiv.innerHTML = '(Something went wrong...)';
     alert(error);
   }
 }
