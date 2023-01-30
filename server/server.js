@@ -5,6 +5,8 @@ import { Configuration, OpenAIApi } from 'openai';
 
 dotenv.config();
 
+const MAX_TOKENS = 500;
+
 const configuration = new Configuration({
     organization: process.env.OPENAI_API_ORG,
     apiKey: process.env.OPENAI_API_KEY,
@@ -32,15 +34,34 @@ app.post('/', async (req, res) => {
             model: "text-davinci-003",
             prompt: `${prompt}\n\n`,
             temperature: 0.2,
-            max_tokens: 500,
+            max_tokens: MAX_TOKENS,
             top_p: 1,
             frequency_penalty: 0,
             presence_penalty: 0,
         });
+        const responseText = response.data.choices[0].text;
+
+        const responseSourceTranslation = await openai.createCompletion({
+            model: "text-davinci-003",
+            prompt: `Translate this to English:\n\n${responseText}\n\n`,
+            temperature: 0,
+            max_tokens: MAX_TOKENS,
+            top_p: 1,
+            frequency_penalty: 0,
+            presence_penalty: 0,
+        });
+        const responseSourceTranslationText = responseSourceTranslation.data.choices[0].text;
 
         res.status(200).send({
-            bot: response.data.choices[0].text
+            bot: responseText,
+            botSourceTranslation: responseSourceTranslationText
         });
+
+        // for testing
+        // res.status(200).send({
+        //     bot: "Como estas?",
+        //     botSourceTranslation: "How are you?"
+        // });
     } catch (error) {
         console.log(error);
         res.status(500).send({ error });
