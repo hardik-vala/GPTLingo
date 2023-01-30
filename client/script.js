@@ -118,7 +118,8 @@ const handleSubmit = async (e) => {
   loader(messageDiv);
 
   try {
-    const response = await fetchWithTimeout('http://localhost:5001', {
+    const response = await fetchWithTimeout('https://gptlingo-server.onrender.com', {
+    // const response = await fetchWithTimeout('http://localhost:5001', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
