@@ -57,7 +57,7 @@ function chatStripe(value, uniqueId) {
 function chatAiStripe(value, sourceTranslation, uniqueId) {
   return (
     `
-    <div class="wrapper ai}">
+    <div class="wrapper ai">
       <div class="chat">
         <div class="profile">
           <img
@@ -68,7 +68,7 @@ function chatAiStripe(value, sourceTranslation, uniqueId) {
         <div class="message" id="${uniqueId}">${value}</div>
       </div>
     </div>
-    <div class="wrapper ai}">
+    <div class="wrapper ai">
       <div class="chat">
         <div class="profile" style="display: none">
           <img
