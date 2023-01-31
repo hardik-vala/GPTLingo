@@ -117,15 +117,22 @@ const handleSubmit = async (e) => {
 
   loader(messageDiv);
 
+  const sourceLanguageSelect = document.getElementById('source-languages');
+  const targetLanguageSelect = document.getElementById('target-languages');
+  const difficultyOptionSelect = document.getElementById('difficulty-options');
+
   try {
-    const response = await fetchWithTimeout('https://gptlingo-server.onrender.com', {
-    // const response = await fetchWithTimeout('http://localhost:5001', {
+    // const response = await fetchWithTimeout('https://gptlingo-server.onrender.com', {
+    const response = await fetchWithTimeout('http://localhost:5001', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        prompt: data.get('prompt')
+        prompt: data.get('prompt'),
+        sourceLanguage: sourceLanguageSelect.value,
+        targetLanguage: targetLanguageSelect.value,
+        difficultyOption: difficultyOptionSelect.value
       }),
       // 30 sec
       timeout: 30000,

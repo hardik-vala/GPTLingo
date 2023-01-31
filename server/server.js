@@ -1,6 +1,6 @@
-import express from 'express';
-import * as dotenv from 'dotenv';
 import cors from 'cors';
+import * as dotenv from 'dotenv';
+import express from 'express';
 import { Configuration, OpenAIApi } from 'openai';
 
 dotenv.config();
@@ -29,39 +29,42 @@ app.post('/', async (req, res) => {
         console.log({ req });
 
         const prompt = req.body.prompt;
+        const sourceLanguage = req.body.sourceLanguage;
+        const targetLanguage = req.body.targetLanguage;
+        const difficultyOption = req.body.difficultyOption;
 
-        const response = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: `${prompt}\n\n`,
-            temperature: 0.2,
-            max_tokens: MAX_TOKENS,
-            top_p: 1,
-            frequency_penalty: 0,
-            presence_penalty: 0,
-        });
-        const responseText = response.data.choices[0].text;
+        // const response = await openai.createCompletion({
+        //     model: "text-davinci-003",
+        //     prompt: `${prompt}\n\n`,
+        //     temperature: 0.2,
+        //     max_tokens: MAX_TOKENS,
+        //     top_p: 1,
+        //     frequency_penalty: 0,
+        //     presence_penalty: 0,
+        // });
+        // const responseText = response.data.choices[0].text;
 
-        const responseSourceTranslation = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: `Translate this to English:\n\n${responseText}\n\n`,
-            temperature: 0,
-            max_tokens: MAX_TOKENS,
-            top_p: 1,
-            frequency_penalty: 0,
-            presence_penalty: 0,
-        });
-        const responseSourceTranslationText = responseSourceTranslation.data.choices[0].text;
+        // const responseSourceTranslation = await openai.createCompletion({
+        //     model: "text-davinci-003",
+        //     prompt: `Translate this to English:\n\n${responseText}\n\n`,
+        //     temperature: 0,
+        //     max_tokens: MAX_TOKENS,
+        //     top_p: 1,
+        //     frequency_penalty: 0,
+        //     presence_penalty: 0,
+        // });
+        // const responseSourceTranslationText = responseSourceTranslation.data.choices[0].text;
 
-        res.status(200).send({
-            bot: responseText,
-            botSourceTranslation: responseSourceTranslationText
-        });
+        // res.status(200).send({
+        //     bot: responseText,
+        //     botSourceTranslation: responseSourceTranslationText
+        // });
 
         // for testing
-        // res.status(200).send({
-        //     bot: "Como estas?",
-        //     botSourceTranslation: "How are you?"
-        // });
+        res.status(200).send({
+            bot: "Como estas?",
+            botSourceTranslation: "How are you?"
+        });
     } catch (error) {
         console.log(error);
         res.status(500).send({ error });
