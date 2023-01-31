@@ -9,31 +9,31 @@
   </head>
   <body>
     <script>
-      function openNav() {
-        document.getElementById("mySidepanel").style.width = "250px";
+      function openOptionsPanel() {
+        document.getElementById("optionsPanel").style.width = "250px";
       }
       
-      function closeNav() {
-        document.getElementById("mySidepanel").style.width = "0";
+      function closeOptionsPanel() {
+        document.getElementById("optionsPanel").style.width = "0";
       }
     </script>
     <script type="module" src="script.js"></script>
-    <div id="mySidepanel" class="sidepanel">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-      <div class="user-option">
+    <div id="optionsPanel" class="optionspanel">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeOptionsPanel()">×</a>
+      <div>
         <label for="source-languages">Source language:</label>
         <select name="source-languages" id="source-languages">
-          <option value="English">English</option>
+          <option value="english">English</option>
         </select>
       </div>
-      <div class="user-option">
+      <div>
         <label for="target-languages">Target language:</label>
         <select name="target-languages" id="target-languages">
-          <option value="French">French</option>
-          <option value="Spanish">Spanish</option>
+          <option value="french">French</option>
+          <option value="spanish">Spanish</option>
         </select>
       </div>
-      <div class="user-option">
+      <div>
         <label for="difficulty-options">Difficulty:</label>
         <select name="difficulty-options" id="difficulty-options">
           <option value="beginner">Beginner</option>
@@ -43,7 +43,7 @@
       </div>
     </div>
     <div id="app">
-      <button class="openbtn" onclick="openNav()">☰ Options</button>  
+      <button class="optionsbtn" onclick="openOptionsPanel()">☰ Options</button>  
       <div id="chat_container"></div>
       <form>
         <textarea name="prompt" rows="1" cols="1" placeholder="Send a message..."></textarea>
