@@ -8,13 +8,47 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <script>
+      function openOptionsPanel() {
+        document.getElementById("optionsPanel").style.width = "250px";
+      }
+      
+      function closeOptionsPanel() {
+        document.getElementById("optionsPanel").style.width = "0";
+      }
+    </script>
+    <script type="module" src="script.js"></script>
+    <div id="optionsPanel" class="optionspanel">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeOptionsPanel()">×</a>
+      <div>
+        <label for="source-languages">Source language:</label>
+        <select name="source-languages" id="source-languages">
+          <option value="english">English</option>
+        </select>
+      </div>
+      <div>
+        <label for="target-languages">Target language:</label>
+        <select name="target-languages" id="target-languages">
+          <option value="french">French</option>
+          <option value="spanish">Spanish</option>
+        </select>
+      </div>
+      <div>
+        <label for="difficulty-options">Difficulty:</label>
+        <select name="difficulty-options" id="difficulty-options">
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </div>
+    </div>
     <div id="app">
+      <button class="optionsbtn" onclick="openOptionsPanel()">☰ Options</button>  
       <div id="chat_container"></div>
       <form>
         <textarea name="prompt" rows="1" cols="1" placeholder="Send a message..."></textarea>
         <button type="submit"><img src="assets/send.svg"/></button>
       </form>
     </div>
-    <script type="module" src="script.js"></script>
   </body>
 </html>

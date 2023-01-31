@@ -1,6 +1,6 @@
-import express from 'express';
-import * as dotenv from 'dotenv';
 import cors from 'cors';
+import * as dotenv from 'dotenv';
+import express from 'express';
 import { Configuration, OpenAIApi } from 'openai';
 
 dotenv.config();
@@ -29,10 +29,40 @@ app.post('/', async (req, res) => {
         console.log({ req });
 
         const prompt = req.body.prompt;
+        const sourceLanguage = req.body.sourceLanguage;
+        const targetLanguage = req.body.targetLanguage;
+        const difficultyOption = req.body.difficultyOption;
+
+        let premable;
+        if (targetLanguage === 'french') {
+            if (difficultyOption === 'beginner') {
+                premable = 'Supposons que je sois un enfant.';
+            } else if (difficultyOption === 'intermediate') {
+                premable = 'Supposons que je sois un adolescent.';
+            } else if (difficultyOption === 'advanced') {
+                premable = 'Supposons que je sois un adulte.';
+            } else {
+                throw new Error(`Unrecognized difficulty option: ${difficultyOption}`);
+            }
+        } if (targetLanguage === 'spanish') {
+            if (difficultyOption === 'beginner') {
+                premable = 'Supongamos que soy un niño.';
+            } else if (difficultyOption === 'intermediate') {
+                premable = 'Supongamos que soy un adolescente.';
+            } else if (difficultyOption === 'advanced') {
+                premable = 'Supongamos que soy un adulto.';
+            } else {
+                throw new Error(`Unrecognized difficulty option: ${difficultyOption}`);
+            }
+        } else {
+            throw new Error(`Unrecognized target language: ${targetLanguage}`);
+        }
+
+        const finalPrompt = `${premable}\n\n${prompt}`;
 
         const response = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: `${prompt}\n\n`,
+            prompt: `${finalPrompt}\n\n`,
             temperature: 0.2,
             max_tokens: MAX_TOKENS,
             top_p: 1,
@@ -43,7 +73,7 @@ app.post('/', async (req, res) => {
 
         const responseSourceTranslation = await openai.createCompletion({
             model: "text-davinci-003",
-            prompt: `Translate this to English:\n\n${responseText}\n\n`,
+            prompt: `Translate this to ${sourceLanguage}:\n\n${responseText}\n\n`,
             temperature: 0,
             max_tokens: MAX_TOKENS,
             top_p: 1,
