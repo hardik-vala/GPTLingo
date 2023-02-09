@@ -83,6 +83,13 @@ function chatAiStripe(value, sourceTranslation, uniqueId) {
   )
 }
 
+function getServerUrl() {
+  if (import.meta.env.PROD) {
+    return 'https://gptlingo-server.onrender.com';
+  }
+  return 'http://localhost:5001';
+}
+
 // copied from https://dmitripavlutin.com/timeout-fetch-request/
 async function fetchWithTimeout(resource, options = {}) {
   // 8 secs
@@ -101,6 +108,9 @@ async function fetchWithTimeout(resource, options = {}) {
 const handleSubmit = async (e) => {
   e.preventDefault();
   const data = new FormData(form);
+
+  const serverUrl = getServerUrl();
+  console.log(`Server URL: ${serverUrl}`);
 
   // user's chatstripe
   chatContainer.innerHTML += chatStripe(data.get('prompt'));
@@ -122,8 +132,7 @@ const handleSubmit = async (e) => {
   const difficultyOptionSelect = document.getElementById('difficulty-options');
 
   try {
-    const response = await fetchWithTimeout('https://gptlingo-server.onrender.com', {
-    // const response = await fetchWithTimeout('http://localhost:5001', {
+    const response = await fetchWithTimeout(serverUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
