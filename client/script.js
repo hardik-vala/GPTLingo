@@ -85,9 +85,9 @@ function chatAiStripe(value, sourceTranslation, uniqueId) {
 
 function getServerUrl() {
   if (import.meta.env.PROD) {
-    return 'https://gptlingo-server.onrender.com';
+    return import.meta.env.VITE_GPTLINGO_SERVER_URL_PROD;
   }
-  return 'http://localhost:5001';
+  return import.meta.env.VITE_GPTLINGO_SERVER_URL_DEV;
 }
 
 // copied from https://dmitripavlutin.com/timeout-fetch-request/
