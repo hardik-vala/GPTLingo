@@ -44,7 +44,7 @@ app.post('/', async (req, res) => {
             } else {
                 throw new Error(`Unrecognized difficulty option: ${difficultyOption}`);
             }
-        } if (targetLanguage === 'spanish') {
+        } else if (targetLanguage === 'spanish') {
             if (difficultyOption === 'beginner') {
                 premable = 'Supongamos que soy un niño.';
             } else if (difficultyOption === 'intermediate') {
