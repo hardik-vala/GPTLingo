@@ -25,9 +25,17 @@ app.get('/', async (req, res) => {
 });
 
 app.post('/', async (req, res) => {
-    try {
-        console.log({ req });
+    console.log({ req });
 
+    if (process.env.DRYRUN === 'true') {
+        res.status(200).send({
+            bot: 'Como estas?',
+            botSourceTranslation: 'How are you?'
+        });
+        return;
+    }
+
+    try {
         const prompt = req.body.prompt;
         const sourceLanguage = req.body.sourceLanguage;
         const targetLanguage = req.body.targetLanguage;
@@ -86,12 +94,6 @@ app.post('/', async (req, res) => {
             bot: responseText,
             botSourceTranslation: responseSourceTranslationText
         });
-
-        // for testing
-        // res.status(200).send({
-        //     bot: "Como estas?",
-        //     botSourceTranslation: "How are you?"
-        // });
     } catch (error) {
         console.log(error);
         res.status(500).send({ error });
