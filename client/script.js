@@ -161,7 +161,7 @@ const handleSubmit = async (e) => {
     } else {
       const err = await response.text();
       messageDiv.innerHTML = '(Something went wrong...)';
-      alert(err);
+      alert(`code: ${response.status}\nerror: ${response.statusText}`);
     }
   } catch (error) {
     clearInterval(loadInterval);
